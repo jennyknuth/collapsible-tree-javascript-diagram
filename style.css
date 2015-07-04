@@ -1,24 +1,27 @@
+*, *:before, *:after {
+box-sizing: border-box;
+}
+svg text{
+  color: brown;
+}
 
 .node {
   cursor: pointer;
+  color: brown;
 }
 
 .node circle {
   fill: #fff;
-  stroke: steelblue;
+  stroke: brown;
   stroke-width: 1.5px;
 }
 
 .node text {
-  font: 10px sans-serif;
+  font: 14px sans-serif;
 }
 
 .link {
   fill: none;
-  stroke: #ccc;
+  stroke: gold;
   stroke-width: 1.5px;
-}
-
-*, *:before, *:after {
-box-sizing: border-box;
 }

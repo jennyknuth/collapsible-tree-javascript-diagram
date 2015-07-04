@@ -1,6 +1,6 @@
 var margin = {top: 20, right: 120, bottom: 20, left: 120},
-    width = 960 - margin.right - margin.left,
-    height = 800 - margin.top - margin.bottom;
+    width = 1500 - margin.right - margin.left,
+    height = 1500 - margin.top - margin.bottom;
 
 var i = 0,
     duration = 750,
@@ -18,10 +18,10 @@ var svg = d3.select("body").append("svg")
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-d3.json("js-diagram.json", function(error, flare) { //link to my data here
+d3.json("js-diagram.json", function(error, javascript) { //link to my data here
   if (error) throw error;
 
-  root = flare;
+  root = javascript;
   root.x0 = height / 2;
   root.y0 = 0;
 
@@ -60,7 +60,7 @@ function update(source) {
 
   nodeEnter.append("circle")
       .attr("r", 1e-6)
-      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+      .style("fill", function(d) { return d._children ? "brown" : "orange"; });
 
   nodeEnter.append("text")
       .attr("x", function(d) { return d.children || d._children ? -10 : 10; })
@@ -75,11 +75,11 @@ function update(source) {
       .attr("transform", function(d) { return "translate(" + d.y + "," + d.x + ")"; });
 
   nodeUpdate.select("circle")
-      .attr("r", 4.5)
-      .style("fill", function(d) { return d._children ? "lightsteelblue" : "#fff"; });
+      .attr("r", function(d) { return d._children ? 4 : 4; })
+      .style("fill", function(d) { return d._children ? "orange" : "#fff"; })
 
   nodeUpdate.select("text")
-      .style("fill-opacity", 1);
+      .style("fill-opacity", .5)
 
   // Transition exiting nodes to the parent's new position.
   var nodeExit = node.exit().transition()
