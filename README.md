@@ -7,7 +7,7 @@ https://github.com/coodict/javascript-in-one-pic, and puts it into a collapsible
 http://bl.ocks.org/mbostock/4339083.
 
 I liked the idea of being able to interact with the complicated tree diagram, to expand and contract it at will
-in order to explore different branches. 
+in order to explore its different branches. 
 
 The entire image, fully expanded: 
 ![Whole](JavaScriptInOneImage.png)
