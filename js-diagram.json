@@ -266,15 +266,102 @@
            {"name": "-="}
          ]
        },
-       {"name": "comparison"},
-       {"name": "logical"}
+       {"name": "comparison",
+        "children": [
+          {"name": ">, >=, <, <="},
+          {"name": "==, !="},
+          {"name": "===, !=="},
+          {"name": "casting"}
+        ]
+       },
+       {"name": "logical",
+         "children": [
+           {"name": "!"},
+           {"name": "&&"},
+           {"name": "||"}
+         ]
+       }
      ]
    },
    { "name": "reference type",
      "children": [
-       {"name": "Function"},
-       {"name": "Array"},
-       {"name": "Object (OOP)"}
+       {"name": "Function",
+         "children": [
+           {"name": "typeof"},
+           {"name": "properties",
+             "children": [
+               {"name": "length"}
+             ]
+           },
+           {"name": "as value (callback)"},
+           {"name": "methods",
+             "children": [
+               {"name": "apply"},
+               {"name": "call"},
+               {"name": "bind"}
+             ]
+           }
+         ]
+       },
+       {"name": "Array",
+         "children": [
+           {"name": "typeof"},
+           {"name": "var a = []"},
+           {"name": "var a = new Array([])"},
+           {"name": "properties",
+             "children": [
+               {"name": "length"}
+             ]
+           },
+           {"name": "methods",
+             "children": [
+               {"name": "a[i]"},
+               {"name": "a[i][j]"},
+               {"name": ".slice(a, b)"},
+               {"name": ".indexOf()"},
+               {"name": ".push()"},
+               {"name": ".pop()"},
+               {"name": ".join()"},
+               {"name": ".concat([])"},
+               {"name": "iterates w/callback",
+                 "children": [
+                   {"name": ".map(callback(element, index, array){}), thisObj)"},
+                   {"name": ".reduce(callback(prev, curr, index, array){}), init)"},
+                   {"name": ".filter(callback(element, index, array){}), thisObj)"},
+                   {"name": ".some(callback(element, index, array){}), thisObj)"},
+                   {"name": ".every(callback(element, index, array){}), thisObj)"}
+                 ]
+               },
+               {"name": "changes array",
+                 "children": [
+                   {"name": ".shift()"},
+                   {"name": ".unshift()"},
+                   {"name": ".sort()"},
+                   {"name": ".reverse()"},
+                   {"name": ".splice()"}
+                 ]
+               }
+             ]
+           },
+           {"name": "iteration",
+             "children": [
+               {"name": "for (start; end; iterator){}"},
+               {"name": ".forEach(function(element){})"}
+             ]
+           }
+         ]
+       },
+       {"name": "Object (OOP)",
+         "children": [
+           {"name": "root of everything"},
+           {"name": "Constructor",
+             "children": [
+               {"name": "prototype"},
+               {"name": "inheritance"}
+             ]
+           }
+         ]
+       }
      ]
    },
    { "name": "flow control",
