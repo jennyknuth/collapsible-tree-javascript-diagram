@@ -10,21 +10,25 @@ var tree = d3.layout.tree()
     .size([height, width]);
 
 var diagonal = d3.svg.diagonal()
-    .projection(function(d) { return [d.y, d.x]; });
+    .projection(function(d) { return [d.y, d.x]; }); // x and y are flipped, why?
+
+console.log("body", d3.select("body"));
 
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.right + margin.left)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+    console.log("body", d3.select("body"));
 
 d3.json("js-diagram.json", function(error, javascript) { //link to my data here
   if (error) throw error;
 
   root = javascript;
-  root.x0 = height / 2;
+  root.x0 = height / 2; // put root node in the center
   root.y0 = 0;
 
+  // recursively collapses each set of children
   function collapse(d) {
     if (d.children) {
       d._children = d.children;
@@ -37,7 +41,7 @@ d3.json("js-diagram.json", function(error, javascript) { //link to my data here
   update(root);
 });
 
-d3.select(self.frameElement).style("height", "800px");
+// d3.select(self.frameElement).style("height", "800px"); // use to make it work in iframe
 
 function update(source) {
 
@@ -127,6 +131,7 @@ function update(source) {
 }
 
 // Toggle children on click.
+// switches the off nodes to on and vice versa, does nothing if no children
 function click(d) {
   if (d.children) {
     d._children = d.children;
