@@ -1,7 +1,8 @@
 var margin = {top: 20, right: 120, bottom: 20, left: 120},
     width = 1500 - margin.right - margin.left,
     height = 2000 - margin.top - margin.bottom,
-    treeHeight = 600; //starts smaller and grows by 1 on each update with depth greater than 2
+    startHeight = 600, // starts smaller
+    treeHeight = startHeight; // tree will grow when depth > 1 and treeHeight is less than height
 
 var i = 0,
     duration = 750,
@@ -56,14 +57,8 @@ function update(source) {
   // Update the nodes…
   var node = svg.selectAll("g.node")
       .data(nodes, function(d) {
-        if (d.depth > 2 && treeHeight < height) { // conditions for tree growth
-          treeHeight += 1
-          tree.size([treeHeight, width])
-        }
         return d.id || (d.id = ++i);
       });
-    console.log('treeHeight', treeHeight);
-    console.log('height', height);
 
   // Enter any new nodes at the parent's previous position.
   var nodeEnter = node.enter().append("g")
@@ -143,10 +138,18 @@ function update(source) {
 // switches the off nodes to on and vice versa, does nothing if no children
 function click(d) {
   if (d.children) {
+    if (d.depth > 1 && treeHeight > startHeight) { // conditions for tree shrinking
+      treeHeight -= (d.children.length * 10)
+      tree.size([treeHeight, width])
+    }
     d._children = d.children;
     d.children = null;
   } else {
     d.children = d._children;
+    if (d.depth > 1 && treeHeight < height) { // conditions for tree growth
+      treeHeight += (d._children.length * 10)
+      tree.size([treeHeight, width])
+    }
     d._children = null;
   }
   update(d);
