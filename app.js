@@ -1,27 +1,25 @@
 var margin = {top: 20, right: 120, bottom: 20, left: 120},
     width = 1500 - margin.right - margin.left,
-    height = 700 - margin.top - margin.bottom;
+    height = 2000 - margin.top - margin.bottom,
+    treeHeight = 600; //starts smaller and grows by 1 on each update with depth greater than 2
 
 var i = 0,
     duration = 750,
     root;
 
 var tree = d3.layout.tree()
-    .size([height, width]);
+    .size([treeHeight, width]);
 
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; }); // x and y are flipped, why?
-
-console.log("body", d3.select("body"));
 
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.right + margin.left)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    console.log("body", d3.select("body"));
 
-d3.json("js-diagram.json", function(error, javascript) { //link to my data here
+d3.json("js-diagram.json", function(error, javascript) {
   if (error) throw error;
 
   root = javascript;
@@ -50,11 +48,22 @@ function update(source) {
       links = tree.links(nodes);
 
   // Normalize for fixed-depth.
-  nodes.forEach(function(d) { d.y = d.depth * 180; });
+  nodes.forEach(function(d) {
+    d.y = d.depth * 180;
+//used to be here
+   });
 
   // Update the nodes…
   var node = svg.selectAll("g.node")
-      .data(nodes, function(d) { return d.id || (d.id = ++i); });
+      .data(nodes, function(d) {
+        if (d.depth > 2 && treeHeight < height) { // conditions for tree growth
+          treeHeight += 1
+          tree.size([treeHeight, width])
+        }
+        return d.id || (d.id = ++i);
+      });
+    console.log('treeHeight', treeHeight);
+    console.log('height', height);
 
   // Enter any new nodes at the parent's previous position.
   var nodeEnter = node.enter().append("g")
@@ -141,4 +150,4 @@ function click(d) {
     d._children = null;
   }
   update(d);
-}
+  }
