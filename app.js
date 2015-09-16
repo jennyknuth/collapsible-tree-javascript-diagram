@@ -1,27 +1,26 @@
 var margin = {top: 20, right: 120, bottom: 20, left: 120},
     width = 1500 - margin.right - margin.left,
-    height = 700 - margin.top - margin.bottom;
+    height = 2000 - margin.top - margin.bottom,
+    startHeight = 600, // starts smaller
+    treeHeight = startHeight; // tree will grow when depth > 1 and treeHeight is less than height
 
 var i = 0,
     duration = 750,
     root;
 
 var tree = d3.layout.tree()
-    .size([height, width]);
+    .size([treeHeight, width]);
 
 var diagonal = d3.svg.diagonal()
     .projection(function(d) { return [d.y, d.x]; }); // x and y are flipped, why?
-
-console.log("body", d3.select("body"));
 
 var svg = d3.select("body").append("svg")
     .attr("width", width + margin.right + margin.left)
     .attr("height", height + margin.top + margin.bottom)
   .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-    console.log("body", d3.select("body"));
 
-d3.json("js-diagram.json", function(error, javascript) { //link to my data here
+d3.json("js-diagram.json", function(error, javascript) {
   if (error) throw error;
 
   root = javascript;
@@ -50,11 +49,16 @@ function update(source) {
       links = tree.links(nodes);
 
   // Normalize for fixed-depth.
-  nodes.forEach(function(d) { d.y = d.depth * 180; });
+  nodes.forEach(function(d) {
+    d.y = d.depth * 180;
+//used to be here
+   });
 
   // Update the nodes…
   var node = svg.selectAll("g.node")
-      .data(nodes, function(d) { return d.id || (d.id = ++i); });
+      .data(nodes, function(d) {
+        return d.id || (d.id = ++i);
+      });
 
   // Enter any new nodes at the parent's previous position.
   var nodeEnter = node.enter().append("g")
@@ -134,11 +138,19 @@ function update(source) {
 // switches the off nodes to on and vice versa, does nothing if no children
 function click(d) {
   if (d.children) {
+    if (d.depth > 1 && treeHeight > startHeight) { // conditions for tree shrinking
+      treeHeight -= (d.children.length * 10)
+      tree.size([treeHeight, width])
+    }
     d._children = d.children;
     d.children = null;
   } else {
     d.children = d._children;
+    if (d.depth > 1 && treeHeight < height) { // conditions for tree growth
+      treeHeight += (d._children.length * 10)
+      tree.size([treeHeight, width])
+    }
     d._children = null;
   }
   update(d);
-}
+  }
